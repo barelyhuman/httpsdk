@@ -1,0 +1,41 @@
+{
+  "name": "httpsdk",
+  "version": "0.0.0",
+  "description": "sdk generator",
+  "keywords": [],
+  "repository": "",
+  "license": "MIT",
+  "author": {
+    "name": "reaper",
+    "email": "ahoy@barelyhuman.dev",
+    "url": "https://reaper.is"
+  },
+  "type": "module",
+  "exports": "./index.js",
+  "files": [
+    "index",
+    "lib/*"
+  ],
+  "scripts": {
+    "fix": "xo --fix",
+    "test": "xo && ava"
+  },
+  "xo": {
+    "prettier": true
+  },
+  "prettier": "@barelyhuman/prettier-config",
+  "dependencies": {},
+  "devDependencies": {
+    "@barelyhuman/prettier-config": "^1.1.0",
+    "@types/node": "^18.11.18",
+    "ava": "^4.3.1",
+    "prettier": "^2.8.2",
+    "xo": "^0.51.0"
+  },
+  "peerDependencies": {
+    "ts-morph": "^17.0.1"
+  },
+  "engines": {
+    "node": ">=14.16"
+  }
+}
