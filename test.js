@@ -7,6 +7,9 @@ test('creates functions', t => {
     getUserById: {
       method: 'get',
       url: 'http://api.example.com/users/#{{id}}',
+      headers: {
+        authorization: '#{{authToken}}',
+      },
     },
   })
 

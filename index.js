@@ -10,9 +10,7 @@ import {
 
 /**
  *
- * @typedef TemplateItem
- *
- * @param {Record<string,TemplateItem>} template
+ * @param {Record<string,import("./index").TemplateItem>} template
  * @param {string} outfile
  */
 export function generateSDK(template = {}, outfile = './.generated/sdk.js') {
@@ -29,7 +27,14 @@ export function generateSDK(template = {}, outfile = './.generated/sdk.js') {
 
     const url = replaceTemplateVariables(templateObject.url, variables)
     const body = replaceTemplateVariables(templateObject.body, variables)
-    const midCode = getRequestorString(templateObject.method, url, body)
+    const headers = replaceTemplateVariables(templateObject.headers, variables)
+
+    const midCode = getRequestorString(
+      templateObject.method,
+      url,
+      body,
+      headers
+    )
 
     updateCode(wrapCode(funcName, _uniqueVariables, midCode))
   }
@@ -61,6 +66,15 @@ function getAllVariables(templateObject) {
     }
   }
 
+  if (
+    templateObject.headers &&
+    Object.keys(templateObject.headers).length > 0
+  ) {
+    for (const x of Object.keys(templateObject.headers)) {
+      variables = [...variables, ...parseVariables(templateObject.headers[x])]
+    }
+  }
+
   const _uniqueVariables = [...new Set(variables)]
 
   return {
@@ -69,11 +83,13 @@ function getAllVariables(templateObject) {
   }
 }
 
-function getRequestorString(method, url, body) {
+function getRequestorString(method, url, body, header) {
   let midCode = ''
   midCode =
     body && Object.keys(body).length > 0
-      ? `return requestor.${method}(\`${url}\`,${serialize(body)})`
-      : `return requestor.${method}(\`${url}\`)`
+      ? `return requestor.${method}(\`${url}\`,${serialize(
+          body
+        )},{headers:${serialize(header)}})`
+      : `return requestor.${method}(\`${url}\`,{headers:${serialize(header)}})`
   return midCode
 }
